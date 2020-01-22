@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Infláció kalkulátor</string>
+    <string name="night_mode">Éjszakai mód</string>
+    <string name="day_mode">Nappali mód</string>
+    <string name="settings">Beállítások</string>
+    <string name="old_value">Régi érték</string>
+    <string name="new_value">Új érték</string>
+    <string name="new_rounded_value">Új ker. érték</string>
+    <string name="quantity">Mennyiség</string>
+    <string name="Total">Új ár</string>
+    <string name="Ok">OK</string>
+</resources>
