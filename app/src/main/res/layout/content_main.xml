@@ -10,7 +10,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/textViewOldValueLabel"
+            android:layout_width="150dp"
+            android:layout_marginEnd="@dimen/size"
+            android:textColor="@color/colorPrimary"
+            android:text="@string/old_value"
+            android:inputType="numberDecimal"
+            style="@style/Text" />
+
+        <TextView
+            android:id="@+id/textViewQuantityLabel"
+            style="@style/Text"
+            android:layout_width="150dp"
+            android:layout_marginStart="160dp"
+            android:textColor="@color/colorPrimary"
+            android:text="@string/quantity"
+            android:inputType="numberDecimal" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp">
 
         <EditText
