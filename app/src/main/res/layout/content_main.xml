@@ -14,7 +14,6 @@
 
         <TextView
             android:id="@+id/textViewOldValueLabel"
-            android:layout_width="150dp"
             android:layout_marginEnd="@dimen/size"
             android:textColor="@color/colorPrimary"
             android:text="@string/old_value"
@@ -24,7 +23,6 @@
         <TextView
             android:id="@+id/textViewQuantityLabel"
             style="@style/Text"
-            android:layout_width="150dp"
             android:layout_marginStart="160dp"
             android:textColor="@color/colorPrimary"
             android:text="@string/quantity"
@@ -40,14 +38,12 @@
         <EditText
             android:id="@+id/editTextValue"
             style="@style/Text"
-            android:layout_width="150dp"
             android:layout_marginEnd="@dimen/size"
             android:inputType="numberDecimal" />
 
         <EditText
             android:id="@+id/editTextQuantity"
             style="@style/Text"
-            android:layout_width="150dp"
             android:layout_marginStart="160dp"
             android:inputType="numberDecimal" />
 

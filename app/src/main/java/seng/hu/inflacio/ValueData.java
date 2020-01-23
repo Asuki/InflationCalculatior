@@ -12,6 +12,13 @@ public class ValueData implements Parcelable {
     int newPrice;
     double rate;
 
+    public void setOldValue(int oldValue) {
+        this.oldValue = oldValue;
+        this.newValue = (int) (oldValue * this.rate);
+        this.newRoundedValue = getNewInflation(oldValue);
+        this.newPrice = this.quantity * this.newRoundedValue;
+    }
+
     public static final Parcelable.Creator<ValueData> CREATOR = new Parcelable.Creator<ValueData>(){
 
         @Override
@@ -56,14 +63,6 @@ public class ValueData implements Parcelable {
     }
 
     public ValueData(Parcel parcel) {
-    }
-
-    public ValueData(int oldValue, int newValue, int newRoundedValue, int quantity, int newPrice) {
-        this.oldValue = oldValue;
-        this.newValue = newValue;
-        this.newRoundedValue = newRoundedValue;
-        this.quantity = quantity;
-        this.newPrice = newPrice;
     }
 
     public ValueData(int oldValue, int quantity, double rate){

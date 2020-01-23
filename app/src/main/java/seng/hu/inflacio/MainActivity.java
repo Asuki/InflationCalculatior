@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     static final String STATE_VALUES = "Value list";
     public static final String NEW_ROUNDED_VALUE = "new rounded value";
     public static final String QUANTITY = "quantity";
+    public static final String OLD_VALUE = "old value";
     private static final int VALUE_EDITOR_REQUEST_CODE = 0;
 
     @Override
@@ -75,20 +77,16 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.i(TAG, "onItemClick: " + adapterView.getItemAtPosition(i).toString());
-                //valueDataArrayList.get(i).setNewRoundedValue(300);
-                Intent intent = new Intent(MainActivity.this, ValueEditor.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(NEW_ROUNDED_VALUE, String.valueOf(valueDataArrayList.get(i).getNewRoundedValue()));
-                bundle.putString(QUANTITY, String.valueOf(valueDataArrayList.get(i).quantity));
-                intent.putExtras(bundle);
-                //intent.putExtra(NEW_ROUNDED_VALUE, 3);
-                //startActivity(intent);
-                startActivityForResult(intent, VALUE_EDITOR_REQUEST_CODE);
-                //Log.i(TAG, "onItemClick - new value in intent:" + intent.getStringExtra(NEW_ROUNDED_VALUE));
-                //populateListView();
-                selectedIndex = i;
-
+                        Log.i(TAG, "onItemClick: " + adapterView.getItemAtPosition(i).toString());
+                        //valueDataArrayList.get(i).setNewRoundedValue(300);
+                        Intent intent = new Intent(MainActivity.this, ValueEditor.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString(NEW_ROUNDED_VALUE, String.valueOf(valueDataArrayList.get(i).getNewRoundedValue()));
+                        bundle.putString(QUANTITY, String.valueOf(valueDataArrayList.get(i).quantity));
+                        bundle.putString(OLD_VALUE, String.valueOf(valueDataArrayList.get(i).getOldValue()));
+                        intent.putExtras(bundle);
+                        startActivityForResult(intent, VALUE_EDITOR_REQUEST_CODE);
+                        selectedIndex = i;
             }
         });
 
@@ -104,8 +102,18 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == VALUE_EDITOR_REQUEST_CODE){
             if (selectedIndex >= 0){
-                valueDataArrayList.get(selectedIndex).setNewRoundedValue(Integer.parseInt(data.getStringExtra(NEW_ROUNDED_VALUE)));
-                valueDataArrayList.get(selectedIndex).setQuantity(Integer.parseInt(data.getStringExtra(QUANTITY)));
+                // Getting back the values from ValueEditor.
+                int oldValueResult = Integer.parseInt(data.getStringExtra(OLD_VALUE));
+                int newRoundedValueResult = Integer.parseInt(data.getStringExtra(NEW_ROUNDED_VALUE));
+                int quantityResult = Integer.parseInt(data.getStringExtra(QUANTITY));
+
+                // Checks if values are modified. If yes, changes it and the ValueDate recalculates the values.
+                if (oldValueResult != valueDataArrayList.get(selectedIndex).getOldValue())
+                    valueDataArrayList.get(selectedIndex).setOldValue(oldValueResult);
+                if (newRoundedValueResult != valueDataArrayList.get(selectedIndex).getNewRoundedValue())
+                    valueDataArrayList.get(selectedIndex).setNewRoundedValue(newRoundedValueResult);
+                if (quantityResult != valueDataArrayList.get(selectedIndex).getQuantity())
+                    valueDataArrayList.get(selectedIndex).setQuantity(quantityResult);
             }
             populateListView();
         }
@@ -118,18 +126,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void calcValue(View view){
-        Log.i(TAG, "calcValue editText value: " + editTextValue.getText());
-        int curValue = Integer.parseInt(editTextValue.getText().toString());
-        int curQuantity = Integer.parseInt(editTextQuantity.getText().toString());
+        if (editTextValue.getText().toString().equals("") || editTextQuantity.getText().toString().equals("")
+                || editTextQuantity.getText() == null || editTextValue.getText() == null) {
+            Toast.makeText(getApplicationContext(), R.string.All_field_required, Toast.LENGTH_SHORT).show();
+        } else {
+            Log.i(TAG, "calcValue editText value: " + editTextValue.getText());
+            int curValue = Integer.parseInt(editTextValue.getText().toString());
+            int curQuantity = Integer.parseInt(editTextQuantity.getText().toString());
 
-        // Adding calculated values to array list
-        Log.i(TAG, "calcValue: " + curValue);
-        emptyEditTexts();
-        valueDataArrayList.add(new ValueData(curValue, curQuantity, rate));
-        populateListView();
-        ValueEditorFragment valueEditorFragment = new ValueEditorFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, valueEditorFragment).commit();
-
+            // Adding calculated values to array list
+            Log.i(TAG, "calcValue: " + curValue);
+            emptyEditTexts();
+            valueDataArrayList.add(new ValueData(curValue, curQuantity, rate));
+            populateListView();
+            ValueEditorFragment valueEditorFragment = new ValueEditorFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.content, valueEditorFragment).commit();
+        }
     }
 
     private void emptyEditTexts() {
